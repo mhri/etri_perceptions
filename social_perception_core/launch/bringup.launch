@@ -1,0 +1,14 @@
+<launch>
+  	<!-- declare arg to be passed in -->
+	<arg name="Color_Image_Topic" />
+	<arg name="PointCloud2_Topic" />
+
+	<node name="belief_update_agent" pkg="social_perception_core" type="belief_update_agent.py" respawn="false" output="screen">
+		<!--
+			Output: /mhri/social_perception_core/beliefs/persons
+		-->
+		<remap from="Tracked_People" to="/mhri/perception_core/3d_pos_estimation/persons" />
+		<param name="autosize" value="true" />
+	</node>
+
+</launch>

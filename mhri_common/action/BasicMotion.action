@@ -1,0 +1,7 @@
+Header header
+string motion_name
+string param
+---
+bool result
+string msg
+---

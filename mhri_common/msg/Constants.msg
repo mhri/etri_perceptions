@@ -1,0 +1,2 @@
+string CognitionCoreNodeName = cognition_core;
+string CognitionCoreActionServerName = cognition_core/run_semantic_motion;

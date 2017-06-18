@@ -1,0 +1,6 @@
+<launch>
+	<include file="$(find etri_perception_launch)/launch/etri_perception_pipeline.launch">
+		<arg name="Color_Image_Topic" value="/camera/rgb/image_rect_color" />
+		<arg name="PointCloud2_Topic" value="/camera/depth_registered/points" />
+	</include>
+</launch>

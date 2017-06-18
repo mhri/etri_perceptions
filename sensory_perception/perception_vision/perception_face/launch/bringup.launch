@@ -1,0 +1,15 @@
+<launch>
+  	<!-- declare arg to be passed in -->
+	<arg name="Color_Image_Topic" />
+	<arg name="PointCloud2_Topic" />
+
+	<node name="perception_face_node" pkg="perception_face" type="perception_face_node.py" respawn="false" output="screen">
+        <!-- 
+            Output Topic: /mhri/perception_face/persons
+        -->
+        <remap from="People_With_Faces" to="/mhri/perception_core_node/percepts" />
+        <remap from="Color_Image" to="$(arg Color_Image_Topic)" />
+		<param name="autosize" value="true" />
+	</node>
+
+</launch>

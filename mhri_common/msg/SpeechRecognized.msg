@@ -1,0 +1,2 @@
+string recognized_word
+float32 confidence

@@ -1,0 +1,13 @@
+<launch>
+  	<!-- declare arg to be passed in -->
+	<arg name="PointCloud2_Topic" />
+
+	<node name="pos3d_estimation" pkg="pos3d_estimation" type="pos3d_estimation" respawn="false" output="screen">
+        <!-- 
+            Output Topic: /mhri/perception_core/3d_pos_estimation/persons
+        -->
+        <remap from="Tracked_People" to="/mhri/perception_face/persons" />
+		<remap from="PointCloud2" to="$(arg PointCloud2_Topic)" />
+		<param name="autosize" value="true" />
+	</node>
+</launch>

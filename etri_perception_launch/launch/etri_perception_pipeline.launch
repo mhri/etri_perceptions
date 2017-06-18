@@ -1,0 +1,29 @@
+<launch>
+  	<!-- declare arg to be passed in -->
+	<arg name="Color_Image_Topic" />
+	<arg name="PointCloud2_Topic" />
+
+	<include file="$(find perception_tracking)/launch/bringup.launch">
+	</include>
+
+	<include file="$(find perception_face)/launch/bringup.launch">
+	</include>
+
+	<include file="$(find perception_mindstate)/launch/bringup.launch">
+	</include>
+
+	<include file="$(find pos3d_estimation)/launch/bringup.launch">
+	</include>
+
+	<include file="$(find visualization)/launch/bringup.launch">
+	</include>
+
+	<include file="$(find social_perception)/launch/bringup.launch">
+	</include>
+
+	<include file="$(find social_perception_core)/launch/bringup.launch">
+	</include>
+
+	<include file="$(find episodic_memory)/launch/bringup.launch">
+	</include>
+</launch>

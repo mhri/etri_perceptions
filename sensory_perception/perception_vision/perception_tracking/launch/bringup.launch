@@ -1,0 +1,12 @@
+<launch>
+  	<!-- declare arg to be passed in -->
+	<arg name="Color_Image_Topic" />
+	<arg name="PointCloud2_Topic" />
+
+	<node name="perception_tracking_node" pkg="perception_tracking" type="perception_tracking_node.py" respawn="false" output="screen">
+		<!--
+			Output Topic: /mhri/people_tracking/persons
+		-->
+		<param name="autosize" value="true" />
+	</node>
+</launch>

@@ -1,0 +1,9 @@
+<launch>
+	<node name="perception_mindstate_node" pkg="perception_mindstate" type="perception_mindstate_node" respawn="false" output="screen">
+        <!-- 
+            Output Topic: /mhri/perception_mindstate/persons
+        -->
+        <remap from="People_With_Face" to="/mhri/perception_core_node/percepts" />
+		<param name="autosize" value="true" />
+	</node>
+</launch>

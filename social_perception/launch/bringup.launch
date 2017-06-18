@@ -1,0 +1,56 @@
+<launch>
+
+	<node name="engagement_detection" pkg="social_perception" type="engagement_detection.py" respawn="false" output="screen">
+        <param name="config_file" value="$(find social_perception)/config/perception_conf.yaml" />
+		<param name="autosize" value="true" />
+	</node>
+
+	<node name="face_detection" pkg="social_perception" type="face_detection.py" respawn="false" output="screen">
+        <param name="config_file" value="$(find social_perception)/config/perception_conf.yaml" />
+		<param name="autosize" value="true" />
+	</node>
+
+	<node name="face_recognition" pkg="social_perception" type="face_recognition.py" respawn="false" output="screen">
+        <remap from="People_With_Face" to="/mhri/perception_face/persons" />
+        <param name="config_file" value="$(find social_perception)/config/perception_conf.yaml" />
+		<param name="autosize" value="true" />
+	</node>
+
+	<node name="facial_expression_recognition" pkg="social_perception" type="facial_expression_recognition.py" respawn="false" output="screen">
+        <param name="config_file" value="$(find social_perception)/config/perception_conf.yaml" />
+		<param name="autosize" value="true" />
+	</node>
+
+	<node name="intention_recognition" pkg="social_perception" type="intention_recognition.py" respawn="false" output="screen">
+        <remap from="People_With_CognitiveStatus" to="/mhri/perception_mindstate/percepts" />
+        <param name="config_file" value="$(find social_perception)/config/perception_conf.yaml" />
+		<param name="autosize" value="true" />
+	</node>
+
+	<node name="people_detection" pkg="social_perception" type="people_detection.py" respawn="false" output="screen">
+        <param name="config_file" value="$(find social_perception)/config/perception_conf.yaml" />
+		<param name="autosize" value="true" />
+	</node>
+
+	<node name="person_detection" pkg="social_perception" type="person_detection.py" respawn="false" output="screen">
+        <param name="config_file" value="$(find social_perception)/config/perception_conf.yaml" />
+		<param name="autosize" value="true" />
+	</node>
+
+	<node name="presence_detection" pkg="social_perception" type="presence_detection.py" respawn="false" output="screen">
+        <param name="config_file" value="$(find social_perception)/config/perception_conf.yaml" />
+		<param name="autosize" value="true" />
+	</node>
+
+	<node name="saliency_detection" pkg="social_perception" type="saliency_detection.py" respawn="false" output="screen">
+        <param name="config_file" value="$(find social_perception)/config/perception_conf.yaml" />
+		<param name="autosize" value="true" />
+	</node>
+
+	<node name="vad_by_lip_reading" pkg="social_perception" type="vad_by_lip_reading.py" respawn="false" output="screen">
+        <param name="config_file" value="$(find social_perception)/config/perception_conf.yaml" />
+        <remap from="People_With_Face" to="/mhri/perception_core_node/percepts" />
+		<param name="autosize" value="true" />
+	</node>
+
+</launch>
