@@ -207,7 +207,18 @@ class PerceptionFace(object):
                 percept.stasm_landmarks.append(point[1])
 
             percept.face_direction = 0
-            percept.mouth_opened = 0
+            fl = (landmarks[27][0] - percept.face_roi.x_offset) / float(percept.face_roi.width)
+            if fl <= 0.4:
+                percept.face_direction = 1;
+            elif fl >= 0.6:
+                percept.face_direction = 2;
+
+            upper_lip_center = landmarks[62][1];
+            lower_lip_center = landmarks[67][1];
+            if abs(upper_lip_center - lower_lip_center) > 3:
+                percept.mouth_opened = 1;
+            else:
+                percept.mouth_opened = 0;
 
             # get body roi
             percept.body_roi.x_offset = max(1, percept.face_roi.x_offset - (int)(percept.face_roi.width / 3))
