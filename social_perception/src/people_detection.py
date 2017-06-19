@@ -8,7 +8,8 @@ import rospy
 import json
 import time
 import numpy
-from mhri_common.msg import *
+from perception_common.msg import *
+from perception_msgs.msg import PersonPerceptArray
 from std_msgs.msg import Empty
 from perception_base.perception_base import PerceptionBase
 
@@ -29,7 +30,7 @@ class PeopleDetection(PerceptionBase):
 
 	def NotifyNoOfGuestsChanged(self, difference, no_of_people):
 		wr_data = self.ConvertPeopleData2Json(difference, no_of_people)
-		
+
 		rospy.loginfo("Event: %s", wr_data)
 
 		self.save_to_memory(self.conf_data.keys()[0], data=wr_data)
@@ -47,6 +48,6 @@ class PeopleDetection(PerceptionBase):
 			self.no_of_people_ = no_of_people
 
 if __name__ == '__main__':
-	rospy.init_node('people_detection', anonymous=False)
+	# rospy.init_node('people_detection', anonymous=False)
 	m = PeopleDetection()
 	rospy.spin()

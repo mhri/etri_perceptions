@@ -134,7 +134,7 @@ def main():
     '''
     Main runner.
     '''
-    rospy.init_node('facial_expression_recognition', anonymous=False)
+    # rospy.init_node('facial_expression_recognition', anonymous=False)
 
     fed = FacialExpressionDetection()
 

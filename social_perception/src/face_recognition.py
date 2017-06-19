@@ -324,7 +324,7 @@ def main():
     '''
     Main runner.
     '''
-    rospy.init_node('face_recognition', anonymous=False)
+    # rospy.init_node('face_recognition', anonymous=False)
 
     IdentityRecognition()
 

@@ -1,0 +1,6 @@
+# 의도인식
+intention_recognition:
+  target_memory: 'social_events_memory'
+  events: ['intention_affirmation', 'intention_negation', 'intention_concentration']
+  data:
+    face_id: ''

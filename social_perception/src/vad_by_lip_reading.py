@@ -126,8 +126,7 @@ class VoiceActivityDetectionByLipReading(PerceptionBase):
 			del self.vad_managers[key]
 
 if __name__ == '__main__':
-	rospy.init_node('vad_by_lip_reading', anonymous=False)
-
+	# rospy.init_node('vad_by_lip_reading', anonymous=False)
 	m = VoiceActivityDetectionByLipReading()
 
 	rospy.spin()

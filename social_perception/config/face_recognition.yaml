@@ -1,0 +1,9 @@
+  face_recognition:
+    target_memory: 'social_events_memory'
+    events: ['face_recognized']
+    data:
+      face_id: []
+      person_id: []
+      name: []
+      confidence: []
+      count: 0

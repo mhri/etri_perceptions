@@ -5,11 +5,11 @@ from datetime import datetime
 
 class KnowledgeGraph:
 	def __init__(self):
-		self.driver = GraphDatabase.driver("bolt://localhost", auth=basic_auth("neo4j","Cog1234"))
+		self.driver = GraphDatabase.driver("bolt://localhost", auth=basic_auth("neo4j","neo4j"))
 		self.session = self.driver.session()
 
 		# py2neo driver
-		self.graph = Graph(password="Cog1234")
+		self.graph = Graph(password="neo4j")
 
 	def Run(self, query):
 		result = self.session.run(query)

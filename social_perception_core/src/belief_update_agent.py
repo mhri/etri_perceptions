@@ -8,7 +8,7 @@ import numpy as np
 import cPickle as pickle
 import os.path
 from std_msgs.msg import String
-from mhri_common.msg import CognitiveState
+from perception_common.msg import CognitiveState
 from perception_msgs.msg import PersonPerceptArray
 import message_filters
 import cv2
@@ -53,7 +53,7 @@ class BeliefUpdateAgent:
 
 		# 얼굴 아이디에 대한 정보를 로딩한다.
 		self.person_info = {}
-		person_info_file = os.path.join(rospkg.RosPack().get_path('perception_core'), 'data', 'person-info.txt')
+		person_info_file = os.path.join(rospkg.RosPack().get_path('social_perception_core'), 'data', 'person-info.txt')
 		if os.path.isfile(person_info_file):
 			lines = [line.rstrip('\n') for line in open(person_info_file)]
 			for line in lines:
@@ -152,7 +152,7 @@ class BeliefUpdateAgent:
 
 			if self.episodic is True:
 				self.update_decision(percept)
-			
+
 			if cloth_data.has_key(percept.trk_id):
 				percept.cloth_color = cloth_data[percept.trk_id]
 

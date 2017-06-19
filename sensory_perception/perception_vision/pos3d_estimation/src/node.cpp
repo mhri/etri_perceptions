@@ -157,7 +157,7 @@ public:
             }
        }
 
-       ROS_DEBUG("POS3D Publishing: %d", percepts.person_percepts.size());
+       ROS_DEBUG("POS3D Publishing: %d", int(percepts.person_percepts.size()));
         publisher.publish(percepts);
 
 				// 디버깅 목적으로 아래 코멘트를 열어서 PointCloud를 배포할 수 있음

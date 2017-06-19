@@ -1,0 +1,9 @@
+  # Saliency Status
+  # notify the most salient person
+  saliency_detection:
+    target_memory: 'social_events_memory'
+    events: ['saliency_changed']
+    data:
+      face_id: ''
+      saliency_value: 0
+      face_index: -1

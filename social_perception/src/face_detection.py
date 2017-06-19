@@ -10,7 +10,7 @@ import numpy as np
 from perception_msgs.msg import PersonPerceptArray
 from std_msgs.msg import Empty
 from perception_msgs.msg import PersonIDArray
-from mhri_common.msg import PersonPresenceState
+from perception_common.msg import PersonPresenceState
 from Queue import Queue
 from perception_base.perception_base import PerceptionBase
 
@@ -171,6 +171,6 @@ class PersonIdentityProcessor(PerceptionBase):
 
 
 if __name__ == '__main__':
-	rospy.init_node('face_detection', anonymous=False)
+	# rospy.init_node('face_detection', anonymous=False)
 	m = PersonIdentityProcessor()
 	rospy.spin()

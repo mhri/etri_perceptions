@@ -1,0 +1,6 @@
+    # 입술 움직임으로부터 판단한 발화 여부
+  vad_by_lip_reading:
+    target_memory: 'social_events_memory'
+    events: ['lip_talking_started', 'lip_talking_finished']
+    data:
+      face_id: ''

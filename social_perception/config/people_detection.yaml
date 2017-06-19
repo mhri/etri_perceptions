@@ -1,0 +1,6 @@
+  people_detection:
+    target_memory: 'social_events_memory'
+    events: ['number_of_guests_changed']
+    data:
+      difference: 0
+      no_of_people: -1

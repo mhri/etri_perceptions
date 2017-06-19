@@ -1,0 +1,7 @@
+  # 사람 검출/추적
+  person_detection:
+    target_memory: 'social_events_memory'
+    events: ['person_appeared', 'person_disappeared']
+    data:
+      person_id: []
+      count: 0

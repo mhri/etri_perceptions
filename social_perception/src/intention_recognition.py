@@ -79,6 +79,6 @@ class IntentionRecognition(PerceptionBase):
 			del self.minds[key]
 
 if __name__ == '__main__':
-	rospy.init_node('intention_recognition', anonymous=False)
+	# rospy.init_node('intention_recognition', anonymous=False)
 	m = IntentionRecognition()
 	rospy.spin()

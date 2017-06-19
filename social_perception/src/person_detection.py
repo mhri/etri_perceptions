@@ -10,7 +10,7 @@ import numpy as np
 from perception_msgs.msg import PersonPerceptArray
 from std_msgs.msg import Empty
 from perception_msgs.msg import PersonIDArray
-from mhri_common.msg import PersonPresenceState
+from perception_common.msg import PersonPresenceState
 from Queue import Queue
 from perception_base.perception_base import PerceptionBase
 
@@ -45,7 +45,7 @@ class PersonIdentityProcessor(PerceptionBase):
 		self.face_detection_state_windows = {}
 		self.face_detection_states = {}
 
-		self.pps_pub = rospy.Publisher("/mhri/person_presence_state", 
+		self.pps_pub = rospy.Publisher("/mhri/person_presence_state",
 									   PersonPresenceState, queue_size=1)
 
 		#rospy.Subscriber("/mhri/people_tracking/alive", PersonIDArray, self.ids_callback)
@@ -65,7 +65,7 @@ class PersonIdentityProcessor(PerceptionBase):
 					break
 			if found == False:
 				appeared.append(percept)
-		
+
 		return appeared, disappeared
 
 
@@ -99,7 +99,7 @@ class PersonIdentityProcessor(PerceptionBase):
 
 		if len(appeared) > 0:
 			# appearance
-			wr_data = self.presenceToData(appeared)		
+			wr_data = self.presenceToData(appeared)
 			rospy.loginfo("person_appeared: %s", wr_data)
 
 			self.save_to_memory(self.conf_data.keys()[0], data=wr_data)
@@ -126,9 +126,9 @@ class PersonIdentityProcessor(PerceptionBase):
 			pps.appeared = []
 			pps.disappeared = []
 			for percept in appeared:
-				pps.appeared.append(percept.trk_id) 
+				pps.appeared.append(percept.trk_id)
 			for percept in disappeared:
-				pps.disappeared.append(percept.trk_id) 
+				pps.disappeared.append(percept.trk_id)
 			self.pps_pub.publish(pps)
 
 			#for percept in disappeared:

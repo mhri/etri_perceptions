@@ -16,8 +16,8 @@ from random import randint
 import rospy
 import rospkg
 from std_msgs.msg import String
-from mhri_common.msg import PersonPresenceState
-from mhri_common.msg import MSetInfo
+from perception_common.msg import PersonPresenceState
+from perception_common.msg import MSetInfo
 from perception_msgs.msg import PersonIdentity
 from knowledge_graph import KnowledgeGraph
 from perception_base.perception_base import PerceptionBase
@@ -44,7 +44,7 @@ class EpisodicMemoryNode(PerceptionBase):
     Episodic Memory Node
     '''
     def __init__(self):
-        super(EpisodicMemoryNode, self).__init__("memory_recall")
+        super(EpisodicMemoryNode, self).__init__("episodic_memory")
 
         rospy.Subscriber('/mhri/person_presence_state', PersonPresenceState, self.pps_callback)
         rospy.Subscriber('/mhri/person_identity_state', PersonIdentity, self.pi_callback)
@@ -346,7 +346,7 @@ def main():
     '''
     Main runner.
     '''
-    rospy.init_node('episodic_memory_node', anonymous=False)
+    # rospy.init_node('episodic_memory_node', anonymous=False)
 
     EpisodicMemoryNode()
 

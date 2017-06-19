@@ -14,7 +14,7 @@ from perception_base.perception_base import PerceptionBase
 class SaliencyDetection(PerceptionBase):
 	# Initialization
 	def __init__(self):
-		super(PersonIdentityProcessor, self).__init__("saliency_detection")
+		super(SaliencyDetection, self).__init__("saliency_detection")
 		self.saliencies = {}
 		self.face_pos = {}
 		self.saliency_values = {}
@@ -86,7 +86,7 @@ class SaliencyDetection(PerceptionBase):
 				self.NotifySaliencyStatus(top_salient_person, max_saliency_value, top_salient_person_index)
 				self.top_salient_person = top_salient_person
 				self.max_saliency_value = max_saliency_value
-				self.last_time_changed = time.time()				
+				self.last_time_changed = time.time()
 		else:
 			#print "Salieny Not Changed."
 			pass
@@ -107,6 +107,6 @@ class SaliencyDetection(PerceptionBase):
 			del self.saliency_values[key]
 
 if __name__ == '__main__':
-	rospy.init_node('saliency_detection', anonymous=False)
+	# rospy.init_node('saliency_detection', anonymous=False)
 	m = SaliencyDetection()
 	rospy.spin()

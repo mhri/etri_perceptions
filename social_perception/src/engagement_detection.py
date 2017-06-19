@@ -67,7 +67,7 @@ class PersonEngagement:
 class EngagementDetection(PerceptionBase):
 
 	def __init__(self):
-		super(PersonEngagement, self).__init__("engagement_detection")
+		super(EngagementDetection, self).__init__("engagement_detection")
 
 		rospy.Subscriber(
 			"/mhri/social_perception_core/beliefs/persons", PersonPerceptArray, self.handle)

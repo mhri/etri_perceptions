@@ -1,0 +1,8 @@
+  # Approach & Leave Status
+  # - minsu(minsu@etri.re.kr)
+  presence_detection:
+    target_memory: 'social_events_memory'
+    events: ['person_approached', 'person_left', 'person_entered_zone']
+    data:
+      face_id: []
+      count: 0

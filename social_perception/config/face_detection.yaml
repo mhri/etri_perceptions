@@ -1,0 +1,6 @@
+face_detection:
+  target_memory: 'social_events_memory'
+  events: ['face_detected', 'face_disappeared']
+  data:
+    face_id: []
+    count: 0

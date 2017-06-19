@@ -15,7 +15,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from perception_msgs.msg import PersonPerceptArray
 from perception_msgs.msg import PersonIdentity
-from mhri_common.msg import PersonPresenceState
+from perception_common.msg import PersonPresenceState
 
 
 class MhriVisualization:
@@ -108,8 +108,8 @@ class MhriVisualization:
             human_y = percept.trk_bbox_y
             human_width = percept.trk_bbox_width
             human_height = percept.trk_bbox_height
-            cv2.rectangle(cv_image, 
-                          (human_x, human_y), 
+            cv2.rectangle(cv_image,
+                          (human_x, human_y),
                           (human_x+human_width, human_y+human_height),
                           (0, 255, 0), 1)
 

@@ -1,0 +1,7 @@
+# Engagement Detection **
+engagement_detection:
+  target_memory: 'social_events_memory'
+  events: ['person_engaged', 'person_disengaged']
+  data:
+    face_id: []
+    count: 0

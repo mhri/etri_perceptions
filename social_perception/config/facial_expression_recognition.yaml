@@ -1,0 +1,7 @@
+facial_expression_recognition:
+  target_memory: 'social_events_memory'
+  events: ['facial_expression_detected']
+  data:
+    face_id: ''
+    emotion_id: ''
+    emotion_confidence: 0
