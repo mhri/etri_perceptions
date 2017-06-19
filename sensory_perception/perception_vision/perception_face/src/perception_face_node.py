@@ -31,6 +31,7 @@ from perception_msgs.msg import PerceptionEvent
 #from magma_util import get_key_with_maxval
 from magma_util import FaceDetectionDLIB
 from magma_util import FaceAlignment
+from magma_util import RegionOfInterest
 
 
 class PerceptionFace(object):
@@ -200,17 +201,21 @@ class PerceptionFace(object):
             percept.face_roi.width = landmarks[15][0] - percept.face_roi.x
             percept.face_roi.height = landmarks[9][1] - percept.face_roi.y
 
+            percept.stasm_landmarks = []
+            for point in landmarks:
+                percept.stasm_landmarks.append(point[0])
+                percept.stasm_landmarks.append(point[1])
+
             percept.face_direction = 0
             percept.mouth_opened = 0
 
             # get body roi
-            percept.body_roi.x_offset = percept.face_roi.x_offset - (int)(percept.face_roi.width / 3)
-            percept.body_roi.x_offset = max(percept.body_roi.x_offset, 1)
+            percept.body_roi.x_offset = max(1, percept.face_roi.x_offset - (int)(percept.face_roi.width / 3))
             percept.body_roi.y_offset = max(1, percept.face_roi.y_offset + percept.face_roi.height + (int)(percept.face_roi.height / 4))
             maxX = min(img_width - 1, percept.body_roi.x_offset + (int)(1.67 * percept.face_roi.width))
             percept.body_roi.width = maxX - percept.body_roi.x_offset
             maxY = min(img_height - 1, percept.body_roi.y_offset + 2 * percept.face_roi.height)
-            percept.body_roi.height = maxY - percept.body_roi.y_offset            
+            percept.body_roi.height = maxY - percept.body_roi.y_offset
 
             if percept.body_roi.height <= 0:
                 percept.body_roi.width = 0
