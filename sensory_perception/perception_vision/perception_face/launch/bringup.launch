@@ -7,7 +7,7 @@
         <!-- 
             Output Topic: /mhri/perception_face/persons
         -->
-        <remap from="People_With_Faces" to="/mhri/perception_core_node/percepts" />
+        <remap from="Tracked_People" to="/mhri/people_tracking/persons" />
         <remap from="Color_Image" to="$(arg Color_Image_Topic)" />
 		<param name="autosize" value="true" />
 	</node>

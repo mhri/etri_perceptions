@@ -1,6 +1,7 @@
 <launch>
 	<!-- Episodic Memory -->
 	<node name="episodic_memory_node" pkg="episodic_memory" type="episodic_memory_node.py" respawn="false" output="screen">
+        <param name="config_file" value="$(find episodic_memory)/config/em.yaml" />
 		<param name="autosize" value="true" />
 	</node>
 </launch>
