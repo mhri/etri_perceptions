@@ -3,7 +3,6 @@
 	<!-- VISUALIZATION -->
     <node name="visualize_node" pkg="visualization" type="visualize.py" respawn="false" output="screen">
         <remap from="Color_Image" to="$(arg Color_Image_Topic)" />
-        <remap from="People_Percepts" to="/mhri/social_perception_core/beliefs/persons" />
-		<param name="autosize" value="true" />
+        <remap from="People_Percepts" to="/mhri/social_perception_core/beliefs/persons" />		
     </node>
 </launch>

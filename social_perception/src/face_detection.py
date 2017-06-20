@@ -112,12 +112,12 @@ class PersonIdentityProcessor(PerceptionBase):
 		'''
 		Transform face detection data into the json format.
 		'''
-		data = json.loads('{}')
+		data = {}
 		data['count'] = len(face_ids)
 		data['face_id'] = []
 		for face_id in face_ids:
 			data['face_id'].append(face_id)
-		return json.dumps(data)
+		return data
 
 
 	def write_face_detection_events(self, detected, disappeared):

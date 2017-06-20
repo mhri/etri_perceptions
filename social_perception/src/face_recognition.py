@@ -237,12 +237,11 @@ class IdentityRecognition(PerceptionBase):
             return 'False'
 
 
-    def percepts_to_json(self, percepts):
+    def percepts_to_json(self, percept):
         '''
         Convert percept data into json format.
         '''
-        data = json.loads('{}')
-        data["count"] = len(percepts)
+        data = self.conf_data['person_identification']['data']
         data["name"] = []
         data["person_id"] = []
         data["confidence"] = []
@@ -254,57 +253,71 @@ class IdentityRecognition(PerceptionBase):
         data["hair_style"] = []
         data["session_face_id"] = []
         data["emotion"] = []
-        for percept in percepts:
-            cur_trk_id = percept.trk_id
-            person_id = percept.person_id
-            name = self.names[person_id] if self.names.has_key(person_id) else person_id
-            cloth_color = percept.cloth_color
-            hair_length = percept.hair_length
-            gender = percept.gender
-            eye_glasses = percept.eye_glasses
-            confidence = percept.person_confidence
-            if cur_trk_id in self.beliefs['face_recognition']:
-                person_id = self.beliefs['face_recognition'][cur_trk_id][0]
-                confidence = self.beliefs['face_recognition'][cur_trk_id][2]
-                name = self.names[person_id] if self.names.has_key(person_id) else person_id
-            if cur_trk_id in self.beliefs['cloth_color']:
-                cloth_color = self.beliefs['cloth_color'][cur_trk_id][0]
-            if cur_trk_id in self.beliefs['hair_length']:
-                hair_length = self.beliefs['hair_length'][cur_trk_id][0]
-            if cur_trk_id in self.beliefs['gender']:
-                gender = self.beliefs['gender'][cur_trk_id][0]
-            if cur_trk_id in self.beliefs['eyeglasses']:
-                eye_glasses = self.beliefs['eyeglasses'][cur_trk_id][0]
-            data["person_id"].append(person_id)
-            data["name"].append(name)
-            data["gender"].append(self.GetGenderString(gender))
-            data["cloth_color"].append(cloth_color)
-            data["eyeglasses"].append(self.GetEyeglassesString(eye_glasses))
-            data["hair_style"].append(hair_length)
-            data["confidence"].append(confidence)
-            face_pos = []
-            face_pos.append(percept.face_pos3d.x)
-            face_pos.append(percept.face_pos3d.y)
-            face_pos.append(percept.face_pos3d.z)
-            face_pos.append(percept.frame_id)
-            data["face_pos"].append(face_pos)
-            data["height"].append(0)
-            data["session_face_id"].append(percept.trk_id)
-            if percept.emotion == 1:
-                data["emotion"].append("happy")
-            else:
-                data["emotion"].append("unhappy")
-            return json.dumps(data)
 
+
+        cur_trk_id = percept.trk_id
+        person_id = percept.person_id
+        name = self.names[person_id] if self.names.has_key(person_id) else person_id
+
+        cloth_color = percept.cloth_color
+        hair_length = percept.hair_length
+        gender = percept.gender
+        eye_glasses = percept.eye_glasses
+        confidence = percept.person_confidence
+
+        if cur_trk_id in self.beliefs['face_recognition']:
+            person_id = self.beliefs['face_recognition'][cur_trk_id][0]
+            confidence = self.beliefs['face_recognition'][cur_trk_id][2]
+            name = self.names[person_id] if self.names.has_key(person_id) else person_id
+
+        if cur_trk_id in self.beliefs['cloth_color']:
+            cloth_color = self.beliefs['cloth_color'][cur_trk_id][0]
+
+        if cur_trk_id in self.beliefs['hair_length']:
+            hair_length = self.beliefs['hair_length'][cur_trk_id][0]
+
+        if cur_trk_id in self.beliefs['gender']:
+            gender = self.beliefs['gender'][cur_trk_id][0]
+
+        if cur_trk_id in self.beliefs['eyeglasses']:
+            eye_glasses = self.beliefs['eyeglasses'][cur_trk_id][0]
+
+        data["person_id"].append(person_id)
+        data["name"].append(name)
+        data["gender"].append(self.GetGenderString(gender))
+        data["cloth_color"].append(cloth_color)
+        data["eyeglasses"].append(self.GetEyeglassesString(eye_glasses))
+        data["hair_style"].append(hair_length)
+        data["confidence"].append(confidence)
+
+        face_pos = []
+        face_pos.append(percept.face_pos3d.x)
+        face_pos.append(percept.face_pos3d.y)
+        face_pos.append(percept.face_pos3d.z)
+        face_pos.append(percept.frame_id)
+        data["face_pos"].append(face_pos)
+        data["height"].append(0)
+        data["session_face_id"].append(percept.trk_id)
+
+        if percept.emotion == 1:
+            data["emotion"].append("happy")
+        else:
+            data["emotion"].append("unhappy")
+
+        return data
 
     def write_identification_event(self, percepts):
         '''
         Write identification information to the social memory.
         '''
-        wr_data = self.conf_data['person_identification']['data']
-        wr_data = self.percepts_to_json(percepts)
+        for percept in percepts:
+            #wr_data = self.conf_data['person_identification']['data']
+            wr_data = self.percepts_to_json(percept)
+            wr_data["count"] = len(percepts)
+            self.save_to_memory('person_identification', data=wr_data)
 
-        self.save_to_memory(self.conf_data.keys()[0], data=wr_data)
+        # percepts가 어레이
+        # 갯수에 따라서 데이터를 업데이트 하고 메모리에 써준다.
 
 
 

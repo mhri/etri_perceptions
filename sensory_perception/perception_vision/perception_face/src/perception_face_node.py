@@ -57,7 +57,7 @@ class PerceptionFace(object):
         self.face_aligner = FaceAlignment(predictor_path=pkg_path + '/data/shape_predictor_68_face_landmarks.dat')
 
         self.model_path = pkg_path + '/data/nn4.small2.v1.t7'
-        self.face_registry_path = pkg_path + '/data/face_registry'        
+        self.face_registry_path = pkg_path + '/data/face_registry'
         rospy.loginfo('perception_face_node - Model Path: {}'.format(self.model_path))
         rospy.loginfo('perception_face_node - Faces Path: {}'.format(self.face_registry_path))
 
@@ -168,7 +168,13 @@ class PerceptionFace(object):
 
     def detect_face(self, image, percept):
         # refine tracking bbox coordinates to be inside image
-        img_height, img_width = image.shape
+        try:
+            cv_image = self.bridge.imgmsg_to_cv2(image, "bgr8")
+        except CvBridgeError as e:
+            print(e)
+
+        (img_height, img_width, channel) = cv_image.shape
+
         percept.trk_bbox_x = max(percept.trk_bbox_x, 0)
         percept.trk_bbox_y = max(percept.trk_bbox_y, 0)
         percept.trk_bbox_width = min(percept.trk_bbox_x + percept.trk_bbox_width, img_width) - percept.trk_bbox_x - 1
@@ -179,7 +185,8 @@ class PerceptionFace(object):
         top = 0
         right = left + percept.trk_bbox_width
         bottom = top + percept.trk_bbox_height
-        roi = image[top:bottom, left:right]
+
+        roi = cv_image[top:bottom, left:right]
 
         # detect faces and select the biggest one
         face_regions = self.face_detector.detect(roi)
@@ -194,12 +201,12 @@ class PerceptionFace(object):
             face_region.right = left + face_region.right
             face_region.bottom = top + face_region.bottom
 
-            landmarks = self.face_aligner.detect_landmarks(image, face_region)
+            landmarks = self.face_aligner.detect_landmarks(cv_image, face_region)
 
             percept.face_roi.x_offset = max(1, landmarks[1][0])
             percept.face_roi.y_offset = max(1, min(landmarks[19][1], landmarks[24][1]))
-            percept.face_roi.width = landmarks[15][0] - percept.face_roi.x
-            percept.face_roi.height = landmarks[9][1] - percept.face_roi.y
+            percept.face_roi.width = landmarks[15][0] - percept.face_roi.x_offset
+            percept.face_roi.height = landmarks[9][1] - percept.face_roi.y_offset
 
             percept.stasm_landmarks = []
             for point in landmarks:

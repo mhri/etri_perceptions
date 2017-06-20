@@ -73,12 +73,12 @@ class PersonIdentityProcessor(PerceptionBase):
 		'''
 		Transform person presence data into the json format.
 		'''
-		data = json.loads('{}')
+		data = {}
 		data['count'] = len(presence)
 		data['person_id'] = []
 		for percept in presence:
 			data['person_id'].append(percept.trk_id)
-		return json.dumps(data)
+		return data
 
 
 	def write_presence(self, appeared, disappeared):
@@ -92,10 +92,6 @@ class PersonIdentityProcessor(PerceptionBase):
 		'''
 		if len(appeared) == 0 and len(disappeared) == 0:
 			return
-
-		rospy.wait_for_service('/social_memory/write_data', timeout=1.0)
-		wr_memory = rospy.ServiceProxy('/social_memory/write_data', WriteData)
-
 
 		if len(appeared) > 0:
 			# appearance

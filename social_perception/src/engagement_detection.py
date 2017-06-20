@@ -89,9 +89,9 @@ class EngagementDetection(PerceptionBase):
 		return faceDirection
 
 	def ConvertEngagementData2Json(self, face_id):
-		data = json.loads('{}')
+		data = {}
 		data['face_id'] = face_id
-		return json.dumps(data)
+		return data
 
 	def Engaged(self, id):
 		wr_data = self.ConvertEngagementData2Json(id)

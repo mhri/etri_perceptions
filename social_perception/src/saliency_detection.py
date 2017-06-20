@@ -25,11 +25,11 @@ class SaliencyDetection(PerceptionBase):
 		self.last_time_changed = time.time()
 
 	def ConvertSaliencyData2Json(self, face_id, saliency_value, face_index):
-		data = json.loads('{}')
+		data = {}
 		data['face_id'] = face_id
 		data['saliency_value'] = saliency_value
 		data['face_index'] = face_index
-		return json.dumps(data)
+		return data
 
 	def NotifySaliencyStatus(self, face_id, saliency_value, face_index):
 		wr_data = self.ConvertSaliencyData2Json(face_id, saliency_value, face_index)

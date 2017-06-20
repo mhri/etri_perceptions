@@ -113,14 +113,14 @@ class PersonIdentityProcessor(PerceptionBase):
 
 	# 사용자의 거리 영역 내 존재 정보를 JSON 형식으로 변환한다.
 	def zoneInfoToData(self, zone_changed):
-		data = json.loads('{}')
+		data = {}
 		data['count'] = len(zone_changed)
 		data['face_id'] = []
 		data['zone_id'] = []
 		for face_id in zone_changed:
 			data['face_id'].append(face_id)
 			data['zone_id'].append(self.zone_map[face_id])
-		return json.dumps(data)
+		return data
 
 
 	# 사용자가 특정 거리 영역에 들어선 정보를 메모리에 적는다.
@@ -137,13 +137,13 @@ class PersonIdentityProcessor(PerceptionBase):
 
 
 	def ConvertApproachData2Json(self, id_list):
-		data = json.loads('{}')
+		data = {}
 		data['count'] = len(id_list)
 		data['face_id'] = []
 		data['zone_id'] = []
 		for face_id in id_list:
 			data['face_id'].append(face_id)
-		return json.dumps(data)
+		return data
 
 
 	# 사용자가 특정 거리 영역에 들어선 정보를 메모리에 적는다.

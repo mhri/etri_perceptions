@@ -23,10 +23,10 @@ class PeopleDetection(PerceptionBase):
 			"/mhri/social_perception_core/beliefs/persons", PersonPerceptArray, self.handle)
 
 	def ConvertPeopleData2Json(self, difference, no_of_people):
-		data = json.loads('{}')
+		data = {}
 		data['difference'] = difference
 		data['no_of_people'] = no_of_people
-		return json.dumps(data)
+		return data
 
 	def NotifyNoOfGuestsChanged(self, difference, no_of_people):
 		wr_data = self.ConvertPeopleData2Json(difference, no_of_people)

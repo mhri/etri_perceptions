@@ -1,19 +1,4 @@
-  person_identification:
-    target_memory: 'social_events_memory'
-    events: ['person_identified']
-    data:
-      session_face_id: []
-      person_id: []
-      name: []
-      face_pos: []
-      confidence: []
-      gender: []
-      cloth_color: []
-      eyeglasses: []
-      height: []
-      hair_style: []
-      emotion: []         # 'happy', 'unhappy'
-      count: 0
+
 
   pointing_gesture_recognition:
     target_memory: 'social_events_memory'
