@@ -22,14 +22,14 @@ class MindStateRecognition
   public:
     ros::Publisher publisher;
 
-    //CMindStateRecog m_MindStateRecog;
+    CMindStateRecog m_MindStateRecog;
 
     MindStateRecognition()
     {
         string packagePath = ros::package::getPath("perception_mindstate");
         string dataPath = packagePath + "/data";
 
-        //initializeMindReader(dataPath, 4);
+        initializeMindReader(dataPath, 4);
 
         // Message Publisher
         publisher = nh_.advertise<PersonPerceptArray>(
@@ -44,18 +44,15 @@ class MindStateRecognition
 
     void initializeMindReader(const string dataPath, int num_frames)
     {
-        /**
         if (this->m_MindStateRecog.LoadMindStateModel(dataPath + "/smodel.dat", num_frames) > 0)
             ROS_INFO("perception_mindstate Load MindStateModel succeed.");
         else
             ROS_INFO("perception_mindstate Load MindStateModel failed.");
-        **/
     }
 
 
     string recognizeMindState(string id, vector<int> &landmarks)
     {
-        /**
         vector <vector<Position> > positionVec;
 
         int num_points = (int)(landmarks.size()/2);
@@ -78,8 +75,6 @@ class MindStateRecognition
         //ROS_INFO("############ MIND STATE: PERSON=%d STATE=%s", id, result.c_str());
         
         return result;
-        **/
-        return "";
     }
 
 
@@ -98,8 +93,7 @@ class MindStateRecognition
 
             vector<int>& landmarks = person.stasm_landmarks;
 
-//            person.cognitive_status = this->recognizeMindState(person.trk_id, landmarks);
-            person.cognitive_status = "Concentrating";
+            person.cognitive_status = this->recognizeMindState(person.trk_id, landmarks);
         }
 
         publisher.publish(percepts);

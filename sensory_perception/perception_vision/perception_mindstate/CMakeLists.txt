@@ -54,7 +54,7 @@ add_executable(perception_mindstate_node src/perception_mindstate_node.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(perception_mindstate_node
    ${catkin_LIBRARIES}
-   #MindStateRecog
+   MindStateRecog
 )
 
 #############
