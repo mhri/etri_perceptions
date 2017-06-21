@@ -33,14 +33,16 @@ class MhriVisualization:
         self.recording_files = []
         self.saving = False
 
+        image_sub = message_filters.Subscriber("/kinect2_head/sd/image_color_rect", Image)
+        fd_sub = message_filters.Subscriber("People_Percepts", PersonPerceptArray)
+        ts = message_filters.ApproximateTimeSynchronizer([image_sub, fd_sub], 10, 0.05)
+        ts.registerCallback(self.callback)
+
         rospy.Subscriber('/mhri/person_presence_state', PersonPresenceState, self.pps_callback)
         rospy.Subscriber('/mhri/person_identity_state', PersonIdentity, self.pi_callback)
 
         self.persons = {}
-
-        cv2.namedWindow('mhri_viz', cv2.WINDOW_NORMAL)
-        cv2.resizeWindow('mhri_viz', 640, 480)
-
+        
 
     def pi_callback(self, pi_msg):
         '''
@@ -260,7 +262,7 @@ class MhriVisualization:
             cv2.putText(cv_image, "Distance: " + str(percept.trk_pos_z),
                         (rx, ry+240), font, scale, fontColor, thickness=thickness)
 
-        cv2.imshow("mhri_viz", cv_image)
+        cv2.imshow('mhri_viz', cv_image)
         cv2.waitKey(1)
 
 
@@ -275,9 +277,4 @@ class MhriVisualization:
 if __name__ == '__main__':
     rospy.init_node('visualize', anonymous=False)
     m = MhriVisualization()
-
-    image_sub = message_filters.Subscriber("Color_Image", Image)
-    fd_sub = message_filters.Subscriber("People_Percepts", PersonPerceptArray)
-    ts = message_filters.ApproximateTimeSynchronizer([image_sub, fd_sub], 10, 0.05)
-    ts.registerCallback(m.callback)
     rospy.spin()

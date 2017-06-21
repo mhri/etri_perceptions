@@ -10,6 +10,7 @@
         <arg name="Color_Image_Topic" value="$(arg Color_Image_Topic)"/>
 	</include>
 
+
 	<include file="$(find perception_mindstate)/launch/bringup.launch">
 	</include>
 
@@ -21,12 +22,12 @@
         <arg name="Color_Image_Topic" value="$(arg Color_Image_Topic)"/>
 	</include>
 
+    <include file="$(find social_perception_core)/launch/bringup.launch">
+	</include>
+
 	<include file="$(find social_perception)/launch/bringup.launch">
 	</include>
 
-	<include file="$(find social_perception_core)/launch/bringup.launch">
-	</include>
-
 	<include file="$(find episodic_memory)/launch/bringup.launch">
-	</include>
+	</include> -->
 </launch>
