@@ -182,27 +182,30 @@ class FaceRecognizer(object):
         aligned_img = self.face_aligner.align(img, landmarks)
         #t = time.time()
         rep = self.get_face_rep(aligned_img)
-        for name in self.representations:
-            representations = self.representations[name]
-            for representation in representations:
-                if name not in matching_scores:
-                    matching_scores[name] = []
-                distance = rep - representation
-                matching_score = np.dot(distance, distance)
-                matching_scores[name].append(matching_score)
-                self.logger.debug("Comparing with %s: distance=%3.2f", name, matching_score)
-        self.logger.debug("Face Matching Scores: %s", matching_scores)
-        for key in matching_scores:
-            matching_scores[key] = np.average(np.array(matching_scores[key]))
-        #print "DISTANCE: ", matching_scores
-        if min(matching_scores.values()) >= 0.6:
-            matching_scores = None
-        else:
-            values = matching_scores.values()
-            values1 = np.sum(values) / np.array(values)
-            softmax_values = softmax(values1)
+        if len(self.representations) > 0:
+            for name in self.representations:
+                representations = self.representations[name]
+                for representation in representations:
+                    if name not in matching_scores:
+                        matching_scores[name] = []
+                    distance = rep - representation
+                    matching_score = np.dot(distance, distance)
+                    matching_scores[name].append(matching_score)
+                    self.logger.info("Comparing with %s: distance=%3.2f", name, matching_score)
+            self.logger.info("Face Matching Scores: %s", matching_scores)
             for key in matching_scores:
-                matching_scores[key] = softmax_values[values.index(matching_scores[key])]
+                matching_scores[key] = np.average(np.array(matching_scores[key]))
+            #print "DISTANCE: ", matching_scores
+            if min(matching_scores.values()) >= 0.6:
+                matching_scores = None
+            else:
+                values = matching_scores.values()
+                values1 = np.sum(values) / np.array(values)
+                softmax_values = softmax(values1)
+                for key in matching_scores:
+                    matching_scores[key] = softmax_values[values.index(matching_scores[key])]
+        else:
+            matching_scores = None
         if measure_blur(aligned_img) > self.min_blur_measure:
             image_to_save = aligned_img
         return matching_scores, image_to_save

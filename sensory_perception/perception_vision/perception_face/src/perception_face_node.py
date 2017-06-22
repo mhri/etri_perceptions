@@ -58,11 +58,11 @@ class PerceptionFace(object):
 
         self.model_path = pkg_path + '/data/nn4.small2.v1.t7'
         self.face_registry_path = pkg_path + '/data/face_registry'
-        rospy.loginfo('perception_face_node - Model Path: {}'.format(self.model_path))
-        rospy.loginfo('perception_face_node - Faces Path: {}'.format(self.face_registry_path))
+        rospy.logdebug('perception_face_node - Model Path: {}'.format(self.model_path))
+        rospy.logdebug('perception_face_node - Faces Path: {}'.format(self.face_registry_path))
 
         self.name_info_file = pkg_path + '/data/name_info.json'
-        rospy.loginfo('perception_face_node - Names File: {}'.format(self.name_info_file))
+        rospy.logdebug('perception_face_node - Names File: {}'.format(self.name_info_file))
         self.names = json.load(open(self.name_info_file))
 
         self.worker = FaceRecognitionWorker(self.model_path, self.face_registry_path,
@@ -73,7 +73,7 @@ class PerceptionFace(object):
         self.emo_job_queue = Queue()
         self.emo_result_queue = Queue()
         smile_recognition_weights = pkg_path + "/data/weights_theano.h5"
-        rospy.loginfo('perception_face_node - Smile Weight Path: {}'.format(smile_recognition_weights))
+        rospy.logdebug('perception_face_node - Smile Weight Path: {}'.format(smile_recognition_weights))
         self.smile_recognition_worker = SmileRecognitionWorker(smile_recognition_weights,
                                                                self.emo_job_queue, self.emo_result_queue)
         self.smile_recognition_worker.start()
@@ -82,7 +82,7 @@ class PerceptionFace(object):
         self.hairlength_job_queue = Queue()
         self.hairlength_result_queue = Queue()
         hairlength_detection_weights = pkg_path + "/data/hairlength_model_keras.hd5"
-        rospy.loginfo('perception_face_node - Hairlength Weight Path: %s',
+        rospy.logdebug('perception_face_node - Hairlength Weight Path: %s',
 					  hairlength_detection_weights)
         self.hairlength_detection_worker = HairLengthDetectionWorker(
                                                      hairlength_detection_weights,
@@ -94,7 +94,7 @@ class PerceptionFace(object):
         self.clothcolor_job_queue = Queue()
         self.clothcolor_result_queue = Queue()
         clothcolor_detection_weights = pkg_path + "/data/color_model_hsv_keras.hd5"
-        rospy.loginfo('perception_face_node - ClothColor Weight Path: %s',
+        rospy.logdebug('perception_face_node - ClothColor Weight Path: %s',
 					  clothcolor_detection_weights)
         self.clothcolor_detection_worker = ClothColorDetectionWorker(
                                                      clothcolor_detection_weights,
@@ -124,7 +124,7 @@ class PerceptionFace(object):
 
         self.loop_count = 0
 
-        rospy.loginfo("PerceptionFace Initialized.")
+        rospy.logdebug("PerceptionFace Initialized.")
 
     def face_memorized_sub(self, msg):
         self.worker.load_faces()
@@ -162,7 +162,7 @@ class PerceptionFace(object):
         if percept.face_detected == 0:
             return False
         if percept.face_roi.width * percept.face_roi.height < self.min_face_size:
-            rospy.logdebug("Person %d has no or small face.", percept.trk_id)
+            rospy.logdebug("Person %s has no or small face.", percept.trk_id)
             return False
         return True
 
@@ -271,16 +271,16 @@ class PerceptionFace(object):
         persons_with_good_face = []
         persons_with_face = []
         for percept in faces.person_percepts:
-            rospy.logdebug('Face Size = %dx%d', percept.face_roi.width, percept.face_roi.height)
-
             # if no face is found on this ROI, continue to the next one
             if not self.detect_face(image, percept):
                 continue
 
+            rospy.logdebug('Face Size = %dx%d', percept.face_roi.width, percept.face_roi.height)
+
             face_quality = self.evaluate_face_quality(image, percept)
             known_face = self.identification_completed(percept.trk_id, "face_recognition")
             if face_quality is True and known_face is False:
-                rospy.logdebug("Person %d has good face.", percept.trk_id)
+                rospy.logdebug("Person %s has good face.", percept.trk_id)
                 persons_to_face_recog.append(percept)
             if face_quality is True:
                 persons_with_good_face.append(percept)

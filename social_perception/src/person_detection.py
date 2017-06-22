@@ -60,8 +60,11 @@ class PersonIdentityProcessor(PerceptionBase):
 			found = False
 			for person in persons:
 				if percept.session_face_id == person.session_face_id:
-					found = True					
-					disappeared.remove(person)
+					found = True
+					try:
+						disappeared.remove(person)
+					except ValueError:
+						continue
 					break
 			if found == False:
 				appeared.append(percept)

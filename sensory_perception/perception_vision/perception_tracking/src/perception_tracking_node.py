@@ -3,7 +3,7 @@
 '''
 People Tracking Information Publisher.
 
-This node accepts tracking information from OpenPTrack 
+This node accepts tracking information from OpenPTrack
 and publishes messages delivering the information.
 
 Author: Minsu Jang [minsu@etri.re.kr]
@@ -130,7 +130,10 @@ class PeopleTracking(object):
                 self.no_track_count[trk_id] += 1
                 if self.no_track_count[trk_id] > self.max_no_track_count:
                     self.dead_ids.append(trk_id)
-                    alive_ids.remove(trk_id)
+                    try:
+                        alive_ids.remove(trk_id)
+                    except Exception as e:
+                        pass 
                     del self.alive_count[trk_id]
                     del self.no_track_count[trk_id]
                 if trk_id in alive_ids:

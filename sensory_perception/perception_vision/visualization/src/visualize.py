@@ -42,7 +42,7 @@ class MhriVisualization:
         rospy.Subscriber('/mhri/person_identity_state', PersonIdentity, self.pi_callback)
 
         self.persons = {}
-        
+
 
     def pi_callback(self, pi_msg):
         '''
