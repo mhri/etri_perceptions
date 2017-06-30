@@ -7,8 +7,7 @@
 		<!--
 			Output: /mhri/social_perception_core/beliefs/persons
 		-->
-		<remap from="Tracked_People" to="/mhri/perception_core/3d_pos_estimation/persons" />
-		<param name="autosize" value="true" />
+		<remap from="Tracked_People" to="/mhri/perception_core/3d_pos_estimation_by_nao/persons" />
 	</node>
 
 </launch>

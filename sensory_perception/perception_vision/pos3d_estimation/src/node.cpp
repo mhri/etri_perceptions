@@ -89,7 +89,7 @@ public:
 							percepts.person_percepts[i].face_pos3d.x = prevPos[percept.session_face_id][0];
 							percepts.person_percepts[i].face_pos3d.y = prevPos[percept.session_face_id][1];
 							percepts.person_percepts[i].face_pos3d.z = prevPos[percept.session_face_id][2];
-							percepts.person_percepts[i].frame_id = "camera_depth_optical_frame";
+							percepts.person_percepts[i].frame_id = "kinect2_head_rgb_optical_frame";
 							continue;
 						}
 
@@ -132,7 +132,7 @@ public:
                 percepts.person_percepts[i].face_pos3d.x = /*-1.0 * */centroid[0];
                 percepts.person_percepts[i].face_pos3d.y = centroid[1];
                 percepts.person_percepts[i].face_pos3d.z = centroid[2];
-                percepts.person_percepts[i].frame_id = "camera_depth_optical_frame";
+                percepts.person_percepts[i].frame_id = "kinect2_head_rgb_optical_frame";
 
                 prevPos[percepts.person_percepts[i].session_face_id] = centroid;
 								//cout << "DIST: " << centroid[2] << endl;
@@ -145,14 +145,14 @@ public:
                     percepts.person_percepts[i].face_pos3d.x = prevPos[session_face_id][0];
                     percepts.person_percepts[i].face_pos3d.y = prevPos[session_face_id][1];
                     percepts.person_percepts[i].face_pos3d.z = prevPos[session_face_id][2];
-                    percepts.person_percepts[i].frame_id = "camera_depth_optical_frame";
+                    percepts.person_percepts[i].frame_id = "kinect2_head_rgb_optical_frame";
                 }
                 else
                 {
                     percepts.person_percepts[i].face_pos3d.x = 0;
                     percepts.person_percepts[i].face_pos3d.y = 0;
                     percepts.person_percepts[i].face_pos3d.z = 0;
-                    percepts.person_percepts[i].frame_id = "camera_depth_optical_frame";
+                    percepts.person_percepts[i].frame_id = "kinect2_head_rgb_optical_frame";
                 }
             }
        }

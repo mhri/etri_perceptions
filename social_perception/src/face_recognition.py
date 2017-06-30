@@ -75,7 +75,7 @@ class IdentityRecognition(PerceptionBase):
         '''
         Update Beliefs
         '''
-        rospy.logdebug("UPDATE_BELIEF: %d=%s=%s=%s=%d",
+        rospy.logdebug("UPDATE_BELIEF: %s=%s=%s=%s=%d",
                        subject_id, category, str(cur_value), str(invalid_value), event_id)
         if cur_value == invalid_value:
             rospy.logdebug('   SKIPPING....')
@@ -84,7 +84,7 @@ class IdentityRecognition(PerceptionBase):
             rospy.logdebug('   SKIPPING....')
             return
 
-        rospy.logdebug("UPDATE_BELIEF: %d=%s=%s=%s=%d",
+        rospy.logdebug("UPDATE_BELIEF: %s=%s=%s=%s=%d",
                        subject_id, category, str(cur_value), str(invalid_value), event_id)
 
         decision_maker = self.decision_makers[category]
@@ -126,7 +126,8 @@ class IdentityRecognition(PerceptionBase):
                 continue
 
             cur_trk_id = percept.trk_id
-            cur_person_id = percept.person_id
+            #cur_person_id = percept.person_id
+            cur_person_id = percept.name
             cur_person_confidence = percept.person_confidence
             cur_cloth_color = percept.cloth_color
             cur_hair_length = percept.hair_length
@@ -137,12 +138,12 @@ class IdentityRecognition(PerceptionBase):
             belief = self.beliefs['face_recognition']
             if cur_person_id != '' and belief.has_key(cur_trk_id) is False:
                 decision_maker = self.decision_makers['face_recognition']
-                rospy.logdebug("ADDING EVIDENCE: %d %s %f",
+                rospy.loginfo("ADDING A FACE RECOGNITION EVIDENCE: %s %s %f",
                                cur_trk_id, cur_person_id, cur_person_confidence)
                 decision, num_votes, confidence = decision_maker.add_evidence(
                     cur_trk_id, cur_person_id, cur_person_confidence)
                 if decision != None:
-                    name = self.names.get(decision, '').encode('utf-8')
+                    #name = self.names.get(decision, '').encode('utf-8')
 
                     # Identification Finished!!
                     belief[cur_trk_id] = (decision, num_votes, confidence)
@@ -153,10 +154,10 @@ class IdentityRecognition(PerceptionBase):
                     identity.human_id = cur_trk_id
                     identity.category = 'person_id'
                     identity.value = decision
-                    rospy.loginfo('>>> PersonID = %s', decision)
+                    rospy.logdebug('>>> PersonID = %s', decision)
                     self.pi_pub.publish(identity)
                     time.sleep(0.001)
-                    rospy.loginfo("****publishing: %s", identity)
+                    rospy.logdebug("****publishing: %s", identity)
                     # name
                     identity = PersonIdentity()
                     identity.human_id = cur_trk_id
@@ -179,13 +180,16 @@ class IdentityRecognition(PerceptionBase):
 
                     face_ids.append(cur_trk_id)
                     person_ids.append(decision)
+                    names.append(cur_person_id)
                     #name = unicode(self.names.get(decision, ''), 'utf-8')
+                    '''
                     name = self.names.get(decision, '')
                     query = '/' + decision + '/name'
                     name = rospy.get_param(query, 'undefined')
                     rospy.loginfo('GET NAME: %s = %s.', query, name)
                     rospy.loginfo('NAME TYPE = %s\n', type(name))
                     names.append(name)
+                    '''
                     confidences.append(confidence)
 
             self.update_belief(cur_trk_id, 'cloth_color', cur_cloth_color, '', 2)
@@ -216,7 +220,7 @@ class IdentityRecognition(PerceptionBase):
         data['person_id'] = person_ids
         data['name'] = names
         data['confidence'] = confidences
-        return json.dumps(data)
+        return data
 
 
     def GetGenderString(self, gender):
@@ -253,6 +257,7 @@ class IdentityRecognition(PerceptionBase):
         data["hair_style"] = []
         data["session_face_id"] = []
         data["emotion"] = []
+        data["age"] = []
 
 
         cur_trk_id = percept.trk_id
@@ -264,6 +269,7 @@ class IdentityRecognition(PerceptionBase):
         gender = percept.gender
         eye_glasses = percept.eye_glasses
         confidence = percept.person_confidence
+        age = percept.age
 
         if cur_trk_id in self.beliefs['face_recognition']:
             person_id = self.beliefs['face_recognition'][cur_trk_id][0]
@@ -289,6 +295,7 @@ class IdentityRecognition(PerceptionBase):
         data["eyeglasses"].append(self.GetEyeglassesString(eye_glasses))
         data["hair_style"].append(hair_length)
         data["confidence"].append(confidence)
+        data["age"].append(age)
 
         face_pos = []
         face_pos.append(percept.face_pos3d.x)
@@ -316,6 +323,14 @@ class IdentityRecognition(PerceptionBase):
             wr_data["count"] = len(percepts)
             self.save_to_memory('person_identification', data=wr_data)
 
+
+            write_data = self.conf_data['persons']['data']
+            write_data['name'] = percept.name
+            write_data['description'] = percept.name
+            write_data['xyz'] = [percept.face_pos3d.x, percept.face_pos3d.y, percept.face_pos3d.z]
+            write_data['frame_id'] = percept.frame_id
+            self.save_to_memory('persons', data=write_data)
+
         # percepts가 어레이
         # 갯수에 따라서 데이터를 업데이트 하고 메모리에 써준다.
 
@@ -325,6 +340,7 @@ class IdentityRecognition(PerceptionBase):
         '''
         Message handler
         '''
+        rospy.logdebug(">>>> face_recognition.handle() called.")
         try:
             if len(msg.person_percepts) > 0:
                 self.update_identity_states(msg.person_percepts)

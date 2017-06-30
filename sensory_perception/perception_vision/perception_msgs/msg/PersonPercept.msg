@@ -5,6 +5,8 @@ sensor_msgs/RegionOfInterest right_eye_roi
 sensor_msgs/RegionOfInterest body_roi
 # gender = 0: Unknown | 1: Male | 2: Female
 int32 gender
+# age
+int32 age
 # eye_glasses = 0: Unknown | 1: Yes | 2: No
 int32 eye_glasses
 int32[] stasm_landmarks

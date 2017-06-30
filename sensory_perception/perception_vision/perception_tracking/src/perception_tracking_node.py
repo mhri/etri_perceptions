@@ -133,9 +133,11 @@ class PeopleTracking(object):
                     try:
                         alive_ids.remove(trk_id)
                     except Exception as e:
-                        pass 
-                    del self.alive_count[trk_id]
-                    del self.no_track_count[trk_id]
+                        pass
+                    if trk_id in self.alive_count:
+                        del self.alive_count[trk_id]
+                    if trk_id in self.no_track_count:
+                        del self.no_track_count[trk_id]
                 if trk_id in alive_ids:
                     percepts.person_percepts.append(percept)
 

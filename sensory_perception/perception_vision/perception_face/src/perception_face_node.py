@@ -17,12 +17,11 @@ from Queue import Queue
 from sensor_msgs.msg import Image, RegionOfInterest
 from std_msgs.msg import String
 from cv_bridge import CvBridge, CvBridgeError
-from FaceRecognizer import FaceRecognizer
-from QueuedProcessing import Worker
-from FaceRecognitionWorker import FaceRecognitionWorker
-from SmileRecognitionWorker import SmileRecognitionWorker
-from HairLengthDetectionWorker import HairLengthDetectionWorker
-from ClothColorDetectionWorker import ClothColorDetectionWorker
+
+# from FaceRecognitionWorker import FaceRecognitionWorker
+# from SmileRecognitionWorker import SmileRecognitionWorker
+# from HairLengthDetectionWorker import HairLengthDetectionWorker
+# from ClothColorDetectionWorker import ClothColorDetectionWorker
 
 from perception_msgs.msg import PersonPerceptArray
 from perception_msgs.msg import PerceptionEvent
@@ -56,51 +55,51 @@ class PerceptionFace(object):
         self.face_detector = FaceDetectionDLIB()
         self.face_aligner = FaceAlignment(predictor_path=pkg_path + '/data/shape_predictor_68_face_landmarks.dat')
 
-        self.model_path = pkg_path + '/data/nn4.small2.v1.t7'
-        self.face_registry_path = pkg_path + '/data/face_registry'
-        rospy.logdebug('perception_face_node - Model Path: {}'.format(self.model_path))
-        rospy.logdebug('perception_face_node - Faces Path: {}'.format(self.face_registry_path))
+        # self.model_path = pkg_path + '/data/nn4.small2.v1.t7'
+        # self.face_registry_path = pkg_path + '/data/face_registry'
+        # rospy.logdebug('perception_face_node - Model Path: {}'.format(self.model_path))
+        # rospy.logdebug('perception_face_node - Faces Path: {}'.format(self.face_registry_path))
 
-        self.name_info_file = pkg_path + '/data/name_info.json'
-        rospy.logdebug('perception_face_node - Names File: {}'.format(self.name_info_file))
-        self.names = json.load(open(self.name_info_file))
+        # self.name_info_file = pkg_path + '/data/name_info.json'
+        # rospy.logdebug('perception_face_node - Names File: {}'.format(self.name_info_file))
+        # self.names = json.load(open(self.name_info_file))
 
-        self.worker = FaceRecognitionWorker(self.model_path, self.face_registry_path,
-                                            self.data_queue, self.result_queue)
-        self.worker.start()
+        # self.worker = FaceRecognitionWorker(self.model_path, self.face_registry_path,
+        #                                     self.data_queue, self.result_queue)
+        # self.worker.start()
 
         # A Worker for Smile Recognition
-        self.emo_job_queue = Queue()
-        self.emo_result_queue = Queue()
-        smile_recognition_weights = pkg_path + "/data/weights_theano.h5"
-        rospy.logdebug('perception_face_node - Smile Weight Path: {}'.format(smile_recognition_weights))
-        self.smile_recognition_worker = SmileRecognitionWorker(smile_recognition_weights,
-                                                               self.emo_job_queue, self.emo_result_queue)
-        self.smile_recognition_worker.start()
+        # self.emo_job_queue = Queue()
+        # self.emo_result_queue = Queue()
+        # smile_recognition_weights = pkg_path + "/data/weights_theano.h5"
+        # rospy.logdebug('perception_face_node - Smile Weight Path: {}'.format(smile_recognition_weights))
+        # self.smile_recognition_worker = SmileRecognitionWorker(smile_recognition_weights,
+        #                                                        self.emo_job_queue, self.emo_result_queue)
+        # self.smile_recognition_worker.start()
 
         # A Worker for Hairlength Detection
-        self.hairlength_job_queue = Queue()
-        self.hairlength_result_queue = Queue()
-        hairlength_detection_weights = pkg_path + "/data/hairlength_model_keras.hd5"
-        rospy.logdebug('perception_face_node - Hairlength Weight Path: %s',
-					  hairlength_detection_weights)
-        self.hairlength_detection_worker = HairLengthDetectionWorker(
-                                                     hairlength_detection_weights,
-                                                     self.hairlength_job_queue,
-                                                     self.hairlength_result_queue)
-        self.hairlength_detection_worker.start()
+        # self.hairlength_job_queue = Queue()
+        # self.hairlength_result_queue = Queue()
+        # hairlength_detection_weights = pkg_path + "/data/hairlength_model_keras.hd5"
+        # rospy.logdebug('perception_face_node - Hairlength Weight Path: %s',
+		# 			  hairlength_detection_weights)
+        # self.hairlength_detection_worker = HairLengthDetectionWorker(
+        #                                              hairlength_detection_weights,
+        #                                              self.hairlength_job_queue,
+        #                                              self.hairlength_result_queue)
+        # self.hairlength_detection_worker.start()
 
         # A Worker for Hairlength Detection
-        self.clothcolor_job_queue = Queue()
-        self.clothcolor_result_queue = Queue()
-        clothcolor_detection_weights = pkg_path + "/data/color_model_hsv_keras.hd5"
-        rospy.logdebug('perception_face_node - ClothColor Weight Path: %s',
-					  clothcolor_detection_weights)
-        self.clothcolor_detection_worker = ClothColorDetectionWorker(
-                                                     clothcolor_detection_weights,
-                                                     self.clothcolor_job_queue,
-                                                     self.clothcolor_result_queue)
-        self.clothcolor_detection_worker.start()
+        # self.clothcolor_job_queue = Queue()
+        # self.clothcolor_result_queue = Queue()
+        # clothcolor_detection_weights = pkg_path + "/data/color_model_hsv_keras.hd5"
+        # rospy.logdebug('perception_face_node - ClothColor Weight Path: %s',
+		# 			  clothcolor_detection_weights)
+        # self.clothcolor_detection_worker = ClothColorDetectionWorker(
+        #                                              clothcolor_detection_weights,
+        #                                              self.clothcolor_job_queue,
+        #                                              self.clothcolor_result_queue)
+        # self.clothcolor_detection_worker.start()
 
         # Topic Subscriptions
         image_sub = message_filters.Subscriber("Color_Image", Image)
@@ -278,96 +277,97 @@ class PerceptionFace(object):
             rospy.logdebug('Face Size = %dx%d', percept.face_roi.width, percept.face_roi.height)
 
             face_quality = self.evaluate_face_quality(image, percept)
-            known_face = self.identification_completed(percept.trk_id, "face_recognition")
-            if face_quality is True and known_face is False:
-                rospy.logdebug("Person %s has good face.", percept.trk_id)
-                persons_to_face_recog.append(percept)
+            # known_face = self.identification_completed(percept.trk_id, "face_recognition")
+            # if face_quality is True and known_face is False:
+            #     rospy.logdebug("Person %s has good face.", percept.trk_id)
+            #     persons_to_face_recog.append(percept)
             if face_quality is True:
                 persons_with_good_face.append(percept)
             persons_with_face.append(percept)
 
-        if len(persons_to_face_recog) > 0:
-            if self.data_queue.empty() is True:
-                faces_data = []
-                emo_data = []
-                for percept in persons_to_face_recog:
-                    faces_data.append((percept.trk_id, cv_image, percept.stasm_landmarks))
-                self.data_queue.put((time.time(), faces_data))
-                self.skip_count = 0
-            else:
-                self.skip_count += 1
+        # if len(persons_to_face_recog) > 0:
+        #     if self.data_queue.empty() is True:
+        #         faces_data = []
+        #         emo_data = []
+        #         for percept in persons_to_face_recog:
+        #             faces_data.append((percept.trk_id, cv_image, percept.stasm_landmarks))
+        #         self.data_queue.put((time.time(), faces_data))
+        #         self.skip_count = 0
+        #     else:
+        #         self.skip_count += 1
 
-        if len(persons_with_good_face) > 0:
-            if self.emo_job_queue.empty() is True:
-                emo_data = []
-                for percept in persons_with_good_face:
-                    emo_data.append((percept.trk_id, cv_image, percept.face_roi))
-                self.emo_job_queue.put((time.time(), emo_data))
+        # if len(persons_with_good_face) > 0:
+        #     if self.emo_job_queue.empty() is True:
+        #         emo_data = []
+        #         for percept in persons_with_good_face:
+        #             emo_data.append((percept.trk_id, cv_image, percept.face_roi))
+        #         self.emo_job_queue.put((time.time(), emo_data))
+        #
+        #     if token == 1 and self.identification_completed(percept.trk_id, 'hair_length') is False and self.hairlength_job_queue.empty() is True:
+        #         hairlength_data = []
+        #         for percept in persons_with_good_face:
+        #             hairlength_data.append((percept.trk_id, cv_image, percept.stasm_landmarks))
+        #         self.hairlength_job_queue.put((time.time(), hairlength_data))
 
-            if token == 1 and self.identification_completed(percept.trk_id, 'hair_length') is False and self.hairlength_job_queue.empty() is True:
-                hairlength_data = []
-                for percept in persons_with_good_face:
-                    hairlength_data.append((percept.trk_id, cv_image, percept.stasm_landmarks))
-                self.hairlength_job_queue.put((time.time(), hairlength_data))
+        # if len(persons_with_face) > 0:
+        #     if token == 2 and self.identification_completed(percept.trk_id, 'cloth_color') is False and self.clothcolor_job_queue.empty() is True:
+        #         clothcolor_data = []
+        #         for percept in persons_with_good_face:
+        #             clothcolor_data.append((percept.trk_id, cv_image, percept.body_roi))
+        #         self.clothcolor_job_queue.put((time.time(), clothcolor_data))
 
-        if len(persons_with_face) > 0:
-            if token == 2 and self.identification_completed(percept.trk_id, 'cloth_color') is False and self.clothcolor_job_queue.empty() is True:
-                clothcolor_data = []
-                for percept in persons_with_good_face:
-                    clothcolor_data.append((percept.trk_id, cv_image, percept.body_roi))
-                self.clothcolor_job_queue.put((time.time(), clothcolor_data))
+        # if self.result_queue.empty() is False:
+        #     timestamp, results = self.result_queue.get()
+        #     self.result_queue.task_done()
+        #     for percept in faces.person_percepts:
+        #         if results.has_key(percept.trk_id) is True:
+        #             if results[percept.trk_id] is None:
+        #                 percept.person_id = 'unknown'
+        #                 percept.name = 'unknown'
+        #                 percept.person_confidence = 1
+        #             else:
+        #                 percept.person_id = results[percept.trk_id][0]
+        #                 percept.person_confidence = results[percept.trk_id][1][percept.person_id]
+        #                 if self.names.has_key(percept.person_id):
+        #                     percept.name = self.names[percept.person_id]
+        #                 else:
+        #                     percept.name = unicode('아무개', 'utf-8')
+        #     rospy.logdebug('Face Recognition: {} after {:4.2f}, duration={:4.2f}'.format(results, time.time() - self.last_recognition_time, time.time() - timestamp))
+        #     self.last_recognition_time = time.time()
 
-        if self.result_queue.empty() is False:
-            timestamp, results = self.result_queue.get()
-            self.result_queue.task_done()
-            for percept in faces.person_percepts:
-                if results.has_key(percept.trk_id) is True:
-                    if results[percept.trk_id] is None:
-                        percept.person_id = 'unknown'
-                        percept.name = 'unknown'
-                        percept.person_confidence = 1
-                    else:
-                        percept.person_id = results[percept.trk_id][0]
-                        percept.person_confidence = results[percept.trk_id][1][percept.person_id]
-                        if self.names.has_key(percept.person_id):
-                            percept.name = self.names[percept.person_id]
-                        else:
-                            percept.name = unicode('아무개', 'utf-8')
-            rospy.logdebug('Face Recognition: {} after {:4.2f}, duration={:4.2f}'.format(results, time.time() - self.last_recognition_time, time.time() - timestamp))
-            self.last_recognition_time = time.time()
+        # if self.emo_result_queue.empty() is False:
+        #     timestamp, results = self.emo_result_queue.get()
+        #     self.emo_result_queue.task_done()
+        #     for percept in faces.person_percepts:
+        #         if results.has_key(percept.trk_id) is True:
+        #             percept.emotion = results[percept.trk_id][0]
+        #             percept.emotion_prob = results[percept.trk_id][1]
+        #     rospy.logdebug('Emotion Recognition: {} with duration {:4.2f}'.format(results, time.time() - timestamp))
 
-        if self.emo_result_queue.empty() is False:
-            timestamp, results = self.emo_result_queue.get()
-            self.emo_result_queue.task_done()
-            for percept in faces.person_percepts:
-                if results.has_key(percept.trk_id) is True:
-                    percept.emotion = results[percept.trk_id][0]
-                    percept.emotion_prob = results[percept.trk_id][1]
-            rospy.logdebug('Emotion Recognition: {} with duration {:4.2f}'.format(results, time.time() - timestamp))
+        # if self.hairlength_result_queue.empty() is False:
+        #     timestamp, results = self.hairlength_result_queue.get()
+        #     self.hairlength_result_queue.task_done()
+        #     for percept in faces.person_percepts:
+        #         if results.has_key(percept.trk_id) is True:
+        #             percept.hair_length = results[percept.trk_id]
+        #     rospy.logdebug('HairLength Detection: {} with duration {:4.2f}'.format(results, time.time() - timestamp))
 
-        if self.hairlength_result_queue.empty() is False:
-            timestamp, results = self.hairlength_result_queue.get()
-            self.hairlength_result_queue.task_done()
-            for percept in faces.person_percepts:
-                if results.has_key(percept.trk_id) is True:
-                    percept.hair_length = results[percept.trk_id]
-            rospy.logdebug('HairLength Detection: {} with duration {:4.2f}'.format(results, time.time() - timestamp))
-
-        if self.clothcolor_result_queue.empty() is False:
-            timestamp, results = self.clothcolor_result_queue.get()
-            self.clothcolor_result_queue.task_done()
-            for percept in faces.person_percepts:
-                if results.has_key(percept.trk_id) is True:
-                    percept.cloth_color = results[percept.trk_id]
-            rospy.logdebug('ClothColor Detection: {} with duration {:4.2f}'.format(results, time.time() - timestamp))
+        # if self.clothcolor_result_queue.empty() is False:
+        #     timestamp, results = self.clothcolor_result_queue.get()
+        #     self.clothcolor_result_queue.task_done()
+        #     for percept in faces.person_percepts:
+        #         if results.has_key(percept.trk_id) is True:
+        #             percept.cloth_color = results[percept.trk_id]
+        #     rospy.logdebug('ClothColor Detection: {} with duration {:4.2f}'.format(results, time.time() - timestamp))
 
         rospy.logdebug("FACE Publishing %d", len(faces.person_percepts))
         self.pub.publish(faces)
 
 
     def stop(self):
-        self.worker.stop()
-        self.smile_recognition_worker.stop()
+        # self.worker.stop()
+        # self.smile_recognition_worker.stop()
+        pass
 
 
 if __name__ == '__main__':
