@@ -361,6 +361,7 @@ class PerceptionFace(object):
         #     rospy.logdebug('ClothColor Detection: {} with duration {:4.2f}'.format(results, time.time() - timestamp))
 
         rospy.logdebug("FACE Publishing %d", len(faces.person_percepts))
+        faces.header.stamp = rospy.Time.now()
         self.pub.publish(faces)
 
 
